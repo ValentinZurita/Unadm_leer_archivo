@@ -1,12 +1,13 @@
 package main;
 
-import vista.Formulario;
+import vista.Ventana;
+import vista.VentanaPanel;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Formulario formulario = new Formulario();
+        Ventana ventana = new Ventana(new VentanaPanel());
 
     }
 }

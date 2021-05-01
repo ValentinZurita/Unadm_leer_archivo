@@ -4,10 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class ControladorFormulario {
 
@@ -54,6 +51,41 @@ public class ControladorFormulario {
                 }
             }
         });
+    }
+
+    public void clickMenuArchivoGuardarComo(JPanel jPanel, JMenuItem menuItem, JTextPane textPane){
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //Varible para almacenar la direccion de nuestro archivo
+                String direccionDelArchivo = null;
+
+                //Obtenemos el nombre y directorio donde se guardara el archivo
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Guardar como");
+
+                int seleccionDelUsuario = fileChooser.showSaveDialog(jPanel);
+
+                if (seleccionDelUsuario == JFileChooser.APPROVE_OPTION){
+                    File archivoxGuardar = fileChooser.getSelectedFile();
+                    direccionDelArchivo = archivoxGuardar.getAbsolutePath();
+                }
+
+                //Creamos el archivo y guardamos el texto que se haya escrito en el
+                try {
+                    FileWriter fileWriter = new FileWriter(direccionDelArchivo);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                    bufferedWriter.write(textPane.getText());
+                    bufferedWriter.close();
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+
     }
 
 
