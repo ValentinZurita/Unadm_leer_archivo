@@ -1,5 +1,7 @@
 package controlador;
 
+import vista.Ventana;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
@@ -83,6 +85,20 @@ public class ControladorFormulario {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+            }
+        });
+
+    }
+
+    public void clickMenuArchivoNuevo(JMenuItem menuItem, JFrame jFrame, JPanel jPanel){
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                //Creamos una nueva ventana de nuestro programa
+                Ventana ventana = new Ventana()
+
             }
         });
 
