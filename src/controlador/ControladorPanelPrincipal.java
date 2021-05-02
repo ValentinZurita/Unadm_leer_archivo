@@ -80,9 +80,9 @@ public class ControladorPanelPrincipal {
                       //JTextPane textPane = dialog.getTextPane();
 
                       //Con el panelDeTexto leemos el stream y lo mostramos en el.
-                      dialog.panelDeTexto.read(buffer, null);
+                      //dialog.panelDeTexto.read(buffer, null);
                       //textPane.read(buffer, null);
-                      dialog.panelDeTexto.requestFocus();
+                      //dialog.panelDeTexto.requestFocus();
 
                       //Cerramos los streams
                       buffer.close();

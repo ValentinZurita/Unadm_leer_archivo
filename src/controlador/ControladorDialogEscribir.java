@@ -1,16 +1,14 @@
 package controlador;
 
-import vista.Ventana;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 
-public class ControladorFormulario {
+public class ControladorDialogEscribir {
 
-    public void clickMenuArchivoArbrir (JMenuItem menuItem, JTextPane panelDeTexto){
+    public void clickMenuArchivoArbrir (JMenuItem menuItem, JTextArea textArea){
 
         menuItem.addActionListener(new ActionListener() {
             @Override
@@ -40,8 +38,8 @@ public class ControladorFormulario {
                     BufferedReader buffer = new BufferedReader(lector);
 
                     //Con el panelDeTexto leemos el stream y lo mostramos en el.
-                    panelDeTexto.read(buffer, null);
-                    panelDeTexto.requestFocus();
+                    textArea.read(buffer, null);
+                    textArea.requestFocus();
 
                     //Cerramos los streams
                     buffer.close();
@@ -55,7 +53,7 @@ public class ControladorFormulario {
         });
     }
 
-    public void clickMenuArchivoGuardarComo(JPanel jPanel, JMenuItem menuItem, JTextPane textPane){
+    public void clickMenuArchivoGuardarComo(JDialog dialog, JMenuItem menuItem, JTextArea textArea){
 
         menuItem.addActionListener(new ActionListener() {
             @Override
@@ -68,7 +66,7 @@ public class ControladorFormulario {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Guardar como");
 
-                int seleccionDelUsuario = fileChooser.showSaveDialog(jPanel);
+                int seleccionDelUsuario = fileChooser.showSaveDialog(dialog);
 
                 if (seleccionDelUsuario == JFileChooser.APPROVE_OPTION){
                     File archivoxGuardar = fileChooser.getSelectedFile();
@@ -79,7 +77,7 @@ public class ControladorFormulario {
                 try {
                     FileWriter fileWriter = new FileWriter(direccionDelArchivo);
                     BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                    bufferedWriter.write(textPane.getText());
+                    bufferedWriter.write(textArea.getText());
                     bufferedWriter.close();
 
                 } catch (IOException ioException) {
@@ -89,20 +87,4 @@ public class ControladorFormulario {
         });
 
     }
-
-    public void clickMenuArchivoNuevo(JMenuItem menuItem, JFrame jFrame, JPanel jPanel){
-
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-            }
-        });
-
-    }
-
-
-
-
 }
