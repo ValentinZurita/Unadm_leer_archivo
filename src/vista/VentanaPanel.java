@@ -7,6 +7,12 @@ import java.awt.*;
 
 public class VentanaPanel extends JPanel {
 
+    JTextPane panelDeTexto;
+
+    public JTextPane getPanelDeTexto() {
+        return panelDeTexto;
+    }
+
     public VentanaPanel(){
 
         //Establecemos el tipo de Layout
@@ -37,7 +43,7 @@ public class VentanaPanel extends JPanel {
         add(menuBar, BorderLayout.NORTH);
 
         //Agregamos un JTextPane al panel
-        JTextPane panelDeTexto = new JTextPane();
+         panelDeTexto = new JTextPane();
         add(panelDeTexto, BorderLayout.CENTER);
 
 
@@ -46,6 +52,8 @@ public class VentanaPanel extends JPanel {
         ControladorFormulario controladorFormulario = new ControladorFormulario();
         controladorFormulario.clickMenuArchivoArbrir(abrirArchivo, panelDeTexto);
         controladorFormulario.clickMenuArchivoGuardarComo(this, guardarArchivo, panelDeTexto);
+
+
 
     }
 
