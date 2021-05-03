@@ -4,11 +4,12 @@ import controlador.ControladorDialogEscribir;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class DialogEscribir extends JDialog {
 
     public JTextArea textArea;
-
+    public File file;
 
     public DialogEscribir() {
 
@@ -34,22 +35,23 @@ public class DialogEscribir extends JDialog {
         menuBar.add(archivo);
 
         //Creamos el menu item "abrir archivo" para el menu "archivo"
-        JMenuItem abrirArchivo = new JMenuItem("Abrir Archivo");
-        JMenuItem guardarArchivo = new JMenuItem("Guardar como");
+        JMenuItem guardar = new JMenuItem("Guardar");
 
         //abrirArchivo.setFont(new Font("Arial", 1, 15));
-        archivo.add(abrirArchivo);
-        archivo.add(guardarArchivo);
+        archivo.add(guardar);
 
         //Agregamos la barra de menus al panel
         add(menuBar, BorderLayout.NORTH);
 
         //Agregamos un JTextPane al panel
-         textArea = new JTextArea();
+        textArea = new JTextArea();
         add(textArea, BorderLayout.CENTER);
+        add(menuBar, BorderLayout.NORTH);
 
+        //Controlador
         ControladorDialogEscribir ctrl = new ControladorDialogEscribir();
-        ctrl.clickMenuArchivoArbrir(abrirArchivo, textArea);
-        ctrl.clickMenuArchivoGuardarComo(this, guardarArchivo, textArea);
+        ctrl.onClose(this);
+        ctrl.guardar(guardar, this);
+
     }
 }

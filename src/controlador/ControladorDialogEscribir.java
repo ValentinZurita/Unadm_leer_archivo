@@ -1,90 +1,104 @@
 package controlador;
 
+import vista.DialogEscribir;
+
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.*;
 
 public class ControladorDialogEscribir {
 
-    public void clickMenuArchivoArbrir (JMenuItem menuItem, JTextArea textArea){
+    public void guardar(JMenuItem menuItem, DialogEscribir dialogEscribir){
 
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                File nombreDeArchivo = null;
-
-                //Creamos un JFileChooser para poder elegir un archivo .txt
-                JFileChooser selector = new JFileChooser();
-                selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
-                //Creamos un filtro para seleccionar unicamente archivos .txt
-                FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivo txt", "txt");
-                selector.setFileFilter(filtro);
-
-                //Obtenemos la ruta del archivo seleccionado con JFileChooser
-                int resultado = selector.showOpenDialog(null);
-                if (resultado == JFileChooser.APPROVE_OPTION){
-                    nombreDeArchivo = selector.getSelectedFile();
-                }
-
                 try {
-                    //lector leera el flujo de caracteres almacenado en la varibale nombreArchivo
-                    FileReader lector = new FileReader(nombreDeArchivo);
 
-                    //Leemos el texto del archivo desde el stream de caracteres
-                    BufferedReader buffer = new BufferedReader(lector);
+                    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(dialogEscribir.file));
+                    bufferedWriter.write(dialogEscribir.textArea.getText());
+                    bufferedWriter.close();
+                    JOptionPane.showMessageDialog(dialogEscribir, "Los cambios han sido guardados");
 
-                    //Con el panelDeTexto leemos el stream y lo mostramos en el.
-                    textArea.read(buffer, null);
-                    textArea.requestFocus();
+                } catch (IOException ioException) {
 
-                    //Cerramos los streams
-                    buffer.close();
-                    lector.close();
+                    ioException.printStackTrace();
 
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                    JOptionPane.showMessageDialog(null, exception);
                 }
+
             }
         });
     }
 
-    public void clickMenuArchivoGuardarComo(JDialog dialog, JMenuItem menuItem, JTextArea textArea){
+    public void onClose(DialogEscribir dialogEscribir){
 
-        menuItem.addActionListener(new ActionListener() {
+        dialogEscribir.addWindowListener(new WindowListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void windowOpened(WindowEvent e) {
 
-                //Varible para almacenar la direccion de nuestro archivo
-                String direccionDelArchivo = null;
+            }
 
-                //Obtenemos el nombre y directorio donde se guardara el archivo
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Guardar como");
+            @Override
+            public void windowClosing(WindowEvent e) {
 
-                int seleccionDelUsuario = fileChooser.showSaveDialog(dialog);
+                int msj = JOptionPane.showConfirmDialog(dialogEscribir, "Deseas guardar los cambios?");
 
-                if (seleccionDelUsuario == JFileChooser.APPROVE_OPTION){
-                    File archivoxGuardar = fileChooser.getSelectedFile();
-                    direccionDelArchivo = archivoxGuardar.getAbsolutePath();
+                if (msj == JOptionPane.YES_OPTION){
+
+                    try {
+                        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(dialogEscribir.file));
+                        bufferedWriter.write(dialogEscribir.textArea.getText());
+                        bufferedWriter.close();
+                        JOptionPane.showMessageDialog(dialogEscribir, "Los cambios han sido guardados");
+
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+
                 }
 
-                //Creamos el archivo y guardamos el texto que se haya escrito en el
-                try {
-                    FileWriter fileWriter = new FileWriter(direccionDelArchivo);
-                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                    bufferedWriter.write(textArea.getText());
-                    bufferedWriter.close();
+                if (msj == JOptionPane.NO_OPTION){
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    JOptionPane.showMessageDialog(dialogEscribir, "No se han guardado los cambios");
                 }
+
+                if (msj == JOptionPane.CANCEL_OPTION){
+
+
+                }
+
+            }
+
+
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
             }
         });
-
     }
 }

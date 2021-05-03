@@ -3,7 +3,6 @@ package controlador;
 import vista.DialogEscribir;
 import vista.DialogLeer;
 import vista.Ventana;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
@@ -27,12 +26,15 @@ public class Controlador {
 
                 int seleccionDelUsuario = fileChooser.showSaveDialog(frame);
 
+                //Una vez ingresado el nombre le agregamos la extension .txt
                 if (seleccionDelUsuario == JFileChooser.APPROVE_OPTION){
-                    File archivoxGuardar = fileChooser.getSelectedFile();
+                    String nombre = fileChooser.getSelectedFile().getAbsolutePath();
+                    nombre = nombre + ".txt";
+                    File archivoxGuardar = new File(nombre);
                     direccionDelArchivo = archivoxGuardar.getAbsolutePath();
                 }
 
-                //Creamos el archivo y guardamos el texto que se haya escrito en el
+                //Creamos el archivo
                 try {
                     FileWriter fileWriter = new FileWriter(direccionDelArchivo);
                     fileWriter.close();
@@ -135,73 +137,128 @@ public class Controlador {
                 //Obtenemos la ruta del archivo seleccionado con JFileChooser
                 int resultado = selector.showOpenDialog(null);
                 if (resultado == JFileChooser.APPROVE_OPTION){
-                    nombreDeArchivo = selector.getSelectedFile();
-                }
+                   dialog.file = selector.getSelectedFile();
 
-                //Lo mostramos en una area de texto
-                //Probamos
-                try {
+                    //Lo mostramos en una area de texto
+                    //Probamos
+                    try {
 
-                    //Area de texto para nuestro archivo
-                    JTextArea textArea = new JTextArea();
+                        //Area de texto para nuestro archivo
+                        JTextArea textArea = new JTextArea();
 
-                    //lector leera el flujo de caracteres almacenado en la varibale nombreArchivo
-                    FileReader lector = new FileReader(nombreDeArchivo);
+                        //lector leera el flujo de caracteres almacenado en la varibale nombreArchivo
+                        FileReader lector = new FileReader(dialog.file);
 
-                    //Leemos el texto del archivo desde el stream de caracteres
-                    BufferedReader buffer = new BufferedReader(lector);
+                        //Leemos el texto del archivo desde el stream de caracteres
+                        BufferedReader buffer = new BufferedReader(lector);
 
-                    //Con el panelDeTexto leemos el stream y lo mostramos en el.
-                    String texto = "";
-                    String linea = "";
+                        //Guardamos el texto en la variable texto.
+                        String texto = "";
+                        String linea = "";
 
-                    while (((linea = buffer.readLine()) != null)){
+                        while (((linea = buffer.readLine()) != null)){
 
-                        texto += linea+"\n";
+                            texto += linea+"\n";
+                        }
+
+                        //Ponemos el texto en el textarea
+                        textArea.setText(texto);
+                        //dialog.setContentPane(textArea);
+                        dialog.textArea.setText(texto);
+
+                        //Habilitamos la edicion
+                        textArea.setEditable(true);
+
+                        //Volvemos visible el JDialog
+                        dialog.repaint();
+                        dialog.setVisible(true);
+
+                        //Cerramos los streams
+                        buffer.close();
+                        lector.close();
+
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                        JOptionPane.showMessageDialog(null, exception);
                     }
 
-                    //Ponemos el texto en el textarea
-                    textArea.setText(texto);
-                    dialog.setContentPane(textArea);
-
-                    //Habilitamos la edicion
-                    textArea.setEditable(true);
-
-                    //Volvemos visible el JDialog
-                    dialog.repaint();
-                    dialog.setVisible(true);
-
-                    //Cerramos los streams
-                    buffer.close();
-                    lector.close();
-
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                    JOptionPane.showMessageDialog(null, exception);
                 }
-                
-                //Guardamos los cambios
-
             }
         });
     }
 
-    public void clickBotonRenombrar(JButton button){
+    public void clickBotonRenombrar(JButton button, Ventana ventana){
 
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //Nuestro archivo a cambiar de nombre
+                File nombreDeArchivo = null;
+
+                //Creamos un JFileChooser para poder elegir un archivo .txt
+                JFileChooser selector = new JFileChooser();
+                selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+                //Creamos un filtro para seleccionar unicamente archivos .txt
+                FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivo txt", "txt");
+                selector.setFileFilter(filtro);
+
+                //Obtenemos la ruta del archivo seleccionado con JFileChooser
+                int resultado = selector.showOpenDialog(null);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nombreDeArchivo = selector.getSelectedFile();
+
+                    //Mostramos un cuadro para introducir el nuevo nombre del archivo
+                    String respuesta = JOptionPane.showInputDialog("Ingresa el nuevo nombre para el archivo");
+
+                    //Renombramos el archivo
+                    File nuevoNombre = new File(nombreDeArchivo.getParent() + "\\" + respuesta + ".txt");
+                    Boolean b = nombreDeArchivo.renameTo(nuevoNombre);
+
+                    //Cuadros de dialog en caso de que el renombrado haya sido exitoso o haya fallado
+                    if (b == true){
+                        JOptionPane.showMessageDialog(ventana,"El archivo ha sido renombrado exitosamente");
+                    }else {
+                        JOptionPane.showMessageDialog(ventana, "El archivo no se ha podido renombrar");
+                    }
+                }
             }
         });
     }
 
-    public void clickBotonEliminar(JButton button){
+    public void clickBotonEliminar(JButton button, Ventana ventana){
 
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //Nuestro archivo a eliminar
+                File nombreDeArchivo = null;
+
+                //Creamos un JFileChooser para poder elegir un archivo .txt
+                JFileChooser selector = new JFileChooser();
+                selector.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+                //Creamos un filtro para seleccionar unicamente archivos .txt
+                FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivo txt", "txt");
+                selector.setFileFilter(filtro);
+
+                //Obtenemos la ruta del archivo seleccionado con JFileChooser
+                int resultado = selector.showOpenDialog(null);
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    nombreDeArchivo = selector.getSelectedFile();
+
+                    //Eliminanos el archivo
+                    Boolean eliminar = nombreDeArchivo.delete();
+
+                    //Mostramos cuadros de dialogo en caso que la eliminacion haya sido exitosa
+                    if (eliminar == true){
+                        JOptionPane.showMessageDialog(ventana, "El archivo ha sido eliminado");
+                    }else {
+                        JOptionPane.showMessageDialog(ventana, "El archivo no se ha podido eliminar");
+                    }
+                }
             }
         });
     }

@@ -41,10 +41,12 @@ public class Ventana extends JFrame {
         //Lo volvemos visible
         setVisible(true);
 
+        //Controlador
         Controlador ctrl = new Controlador();
         ctrl.clickBotonCrear(botonCrear, this);
         ctrl.clickBotonLeer(botonLeer, new DialogLeer(this, true));
         ctrl.clickBotonEscribir(botonEscribir, new DialogEscribir());
+        ctrl.clickBotonRenombrar(botonRenombrar, this);
 
     }
 

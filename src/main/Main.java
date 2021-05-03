@@ -1,8 +1,6 @@
 package main;
 
-import vista.PanelPrincipal;
 import vista.Ventana;
-import vista.VentanaPanel;
 
 public class Main {
 
